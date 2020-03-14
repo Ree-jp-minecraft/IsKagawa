@@ -1,7 +1,6 @@
 function doPost(e) {
   var params = JSON.parse(e.postData.getDataAsString());
   var properties = PropertiesService.getScriptProperties();
-  var data = Json.parse(properties.getProperty(params.name));
   
   var isKagawa = "guest";
   var weekPlayTime = 0;
@@ -9,6 +8,8 @@ function doPost(e) {
   var allPlayTime = 0;
   
   if (properties.getProperty(params.name)) {
+    var data = Json.parse(properties.getProperty(params.name));
+    
     if (params.option === "add") {
       data.weekPlayTime += params.value;
       data.dayPlayTime += params.value;
@@ -44,4 +45,24 @@ function doPost(e) {
   output.setContent(JSON.stringify({isKagawa: isKagawa, weekPlayTime: weekPlayTime, dayPlayTime: dayPlayTime, allPlayTime: allPlayTime}));
 
   return output;
+}
+
+function resetDay() {
+  var properties = PropertiesService.getScriptProperties();
+  var userDatas = properties.getProperties();
+  for(var user in userDatas) {
+    var json = Json.parse(userDatas[user]);
+    json.dayPlayTime = 0;
+    properties.setProperty(user, Json.stringfy(json));
+  }
+}
+
+function resetWeek() {
+  var properties = PropertiesService.getScriptProperties();
+  var userDatas = properties.getProperties();
+  for(var user in userDatas) {
+    var json = Json.parse(userDatas[user]);
+    json.weekPlayTime = 0;
+    properties.setProperty(user, Json.stringfy(json));
+  }
 }
