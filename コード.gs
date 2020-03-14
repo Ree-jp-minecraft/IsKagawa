@@ -18,7 +18,15 @@ function doPost(e) {
       dayPlayTime = data.dayPlayTime;
       allPlayTime = data.allPlayTime;
       properties.setProperty(params.name, Json.stringify({isKagawa: isKagawa, weekPlayTime: weekPlayTime, dayPlayTime: dayPlayTime, allPlayTime: allPlayTime}));
-    }else {
+    }else　if (params.option === set) {
+      var json = Json.parse(properties.getProperty(params.name));
+      json.isKagawa = params.value;
+      properties.setProperty(params.name, Json.stringify(json));
+      isKagawa = data.isKagawa;
+      weekPlayTime = data.weekPlayTime;
+      dayPlayTime = data.dayPlayTime;
+      allPlayTime = data.allPlayTime;
+    } else {
       isKagawa = data.isKagawa;
       weekPlayTime = data.weekPlayTime;
       dayPlayTime = data.dayPlayTime;
@@ -28,10 +36,8 @@ function doPost(e) {
     if (params.option === "register") {
       properties.setProperty(params.name, Json.stringify({isKagawa: params.value, weekPlayTime: weekPlayTime, dayPlayTime: dayPlayTime, allPlayTime: allPlayTime}));
       isKagawa = params.value;
-    } else if (params.option === "get") {
-      var userDatas = properties.getProperties();
+      }
     }
-  }
   
   var output = ContentService.createTextOutput();
   output.setMimeType(ContentService.MimeType.JSON);
